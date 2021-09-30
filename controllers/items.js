@@ -1,6 +1,16 @@
+/*
+* Express import
+* Axios import -> help us to make external requests
+*/
 const { response } = require('express');
 const axios = require('axios').default;
 
+
+/*
+* itemsGet expect a query value called q
+* @param q -> string value
+* return all products data
+*/
 const itemsGet = async (req, res = response) => {
   const {q} = req.query;
   const mlQueryUrl = 'https://api.mercadolibre.com/sites/MLA/search?q=' + q + '&limit=4';
@@ -51,10 +61,23 @@ const itemsGet = async (req, res = response) => {
         categories: categories
       });
     });
+  }).catch(() => {
+    res.status(200).json({
+      author: {
+        name: 'Adrian',
+        lastname: 'Salvador'
+      },
+      items: [],
+      categories: []
+    });
   })
 };
 
-
+/*
+* itemsGetSegment expect a product id called id
+* @param q -> string value
+* return product id data
+*/
 const itemsGetSegment = async (req, res = response) => {
   const id = req.params.id;
   const mlItemDataUrl = 'https://api.mercadolibre.com/items/' + id;
@@ -84,9 +107,18 @@ const itemsGetSegment = async (req, res = response) => {
         },
       });
     });
+  }).catch(() => {
+    res.status(200).json({
+      author: {
+        name: 'Adrian',
+        lastname: 'Salvador'
+      },
+      item: null
+    });
   });
 };
 
+// export controllers
 module.exports = {
   itemsGet,
   itemsGetSegment
